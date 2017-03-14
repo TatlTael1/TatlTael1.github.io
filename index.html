@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head>
+    <!-- LeafletJS stylesheet and Javascript included from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- div for the map to be drawn onto -->
+    <div id="map"></div>
+    <input type="radio" name="renderOption" value="blank" onclick="switchRender(); this.onclick=null;"> None
+    <input type="radio" name="renderOption" value="red" onclick="switchRender(); this.onclick=null;"> Red
+    <input type="radio" name="renderOption" value="green" onclick="switchRender()"> Green
+
+    <!-- Include the code for creating the map -->
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="map.js"></script>
+</body>
+</hmtl>
