@@ -7,9 +7,11 @@
 <body>
     <!-- div for the map to be drawn onto -->
     <div id="map"></div>
-    <input type="radio" name="renderOption" value="blank" onclick="switchRender(); this.onclick=null;"> None
-    <input type="radio" name="renderOption" value="red" onclick="switchRender(); this.onclick=null;"> Red
-    <input type="radio" name="renderOption" value="green" onclick="switchRender()"> Green
+    <input type="text" id="polyName" placeholder="Enter a name for the Polygon">
+    <input type="radio" name="renderOption" value="red"> Red (Uni)
+    <input type="radio" name="renderOption" value="green"> Green (School)
+    <input type="radio" name="renderOption" value="pattern">Pattern
+    <input type="submit" id="submit" value="Render" onclick="switchRender()"> 
 
     <!-- Include the code for creating the map -->
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
