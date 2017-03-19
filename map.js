@@ -1,6 +1,13 @@
 var i = 1;
 var pgons = {};
 
+function showPatternTypes() {
+  if(document.getElementById('patternType').style.visibility == 'hidden'){
+    document.getElementById('patternType').style.visibility = 'visible';
+  } else {
+    document.getElementById('patternType').style.visibility = 'hidden';
+  }
+}
 
 map = L.map('map', { //Create the map and choose a center point and zoom level
     center: [50.3755, -4.1387],
@@ -17,6 +24,7 @@ var latlngs = [[50.376429, -4.139996],[50.375889, -4.141241],[50.374989, -4.1416
 var latlngs2 = [[50.376229, -4.134996],[50.374989, -4.135761],[50.374759, -4.134861],[50.374950, -4.134450],[50.37590, -4.133950]];
 
 var lcontrol = L.control.layers(null, pgons).addTo(map);
+var stripes = new L.StripePattern(); stripes.addTo(map);
 
 function switchRender() {
     if(document.getElementById("polyName").value == "") {
@@ -46,6 +54,34 @@ function switchRender() {
             console.log(map._layers);
             break;
         case 'pattern':
+            switch (document.querySelector('input[name="patternOption"]:checked').value) {
+              case 'stripe':
+                var polygon3 = L.polygon(latlngs, {fillPattern: stripes});
+                var polyNumber = "Polygon" + i;
+                pgons[polyNumber] = polygon3;
+                //map.addLayer(polygon1);
+            
+                var pName = document.getElementById("polyName").value;
+                lcontrol.addOverlay(polygon3, pName);
+                i++;
+                console.log(map._layers);
+                break;
+              case 'circle':
+                var shape = new L.PatternCircle({x: 15, y: 15, radius: 15, fill: true});
+                var pattern = new L.Pattern({width: 50, height: 50}); 
+                pattern.addShape(shape); 
+                pattern.addTo(map);
+                var polygon3 = L.polygon(latlngs, {fillPattern: pattern});
+                var polyNumber = "Polygon" + i;
+                pgons[polyNumber] = polygon3;
+                //map.addLayer(polygon1);
+            
+                var pName = document.getElementById("polyName").value;
+                lcontrol.addOverlay(polygon3, pName);
+                i++;
+                console.log(map._layers);
+                break;
+            }
             break;
     }
         // zoom the map to the polygon

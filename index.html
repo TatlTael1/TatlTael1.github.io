@@ -10,11 +10,16 @@
     <input type="text" id="polyName" placeholder="Enter a name for the Polygon">
     <input type="radio" name="renderOption" value="red"> Red (Uni)
     <input type="radio" name="renderOption" value="green"> Green (School)
-    <input type="radio" name="renderOption" value="pattern">Pattern
-    <input type="submit" id="submit" value="Render" onclick="switchRender()"> 
+    <input type="radio" name="renderOption" value="pattern" onchange="showPatternTypes()">Pattern
+    <input type="submit" id="submit" value="Render" onclick="switchRender()"> <br />
+    <div id="patternType" style="visibility: hidden">
+      <input type="radio" name="patternOption" value="stripe"> Stripe
+      <input type="radio" name="patternOption" value="circle">Circle
+    </div>
 
     <!-- Include the code for creating the map -->
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="pattern/leaflet.pattern-src.js"></script>
     <script src="map.js"></script>
 </body>
 </hmtl>
