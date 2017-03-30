@@ -9,21 +9,33 @@ function showPatternTypes() {
   }
 }
 
+
+//27700
+
 map = L.map('map', { //Create the map and choose a center point and zoom level
     center: [50.3755, -4.1387],
     zoom: 17
 });
 
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { //Create a tile layer using OpenStreetMap data
+var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { //Create a tile layer using OpenStreetMap data
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', //Give the copyright in the lower right of the map
 }).addTo(map); //Place it on the map
+
+var aerial = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+
+var baseMap = {
+  "OpenStreetMap" : osm,
+  "Aerial": aerial
+}
 
 // create a red polygon from an array of LatLng points
 var latlngs = [[50.376429, -4.139996],[50.375889, -4.141241],[50.374989, -4.141680],[50.373850, -4.139950],[50.373800, -4.138550],[50.377089, -4.136150],[50.377089, -4.138673]];
 
 var latlngs2 = [[50.376229, -4.134996],[50.374989, -4.135761],[50.374759, -4.134861],[50.374950, -4.134450],[50.37590, -4.133950]];
 
-var lcontrol = L.control.layers(null, pgons).addTo(map);
+var lcontrol = L.control.layers(baseMap, pgons).addTo(map);
 var stripes = new L.StripePattern(); stripes.addTo(map);
 
 function switchRender() {
