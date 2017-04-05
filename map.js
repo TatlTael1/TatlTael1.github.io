@@ -12,22 +12,49 @@ function showPatternTypes() {
 
 //27700
 
-map = L.map('map', { //Create the map and choose a center point and zoom level
-    center: [50.3755, -4.1387],
-    zoom: 17
+// Define a Proj4Leaflet crs instance configured for British National Grid
+// (EPSG:27700) and the resolutions of our base map
+var crs = new L.Proj.CRS(
+    'EPSG:27700',
+    '+proj=tmerc +lat_0=49 +lon_0=-2 +k=0.9996012717 +x_0=400000 +y_0=-100000 +ellps=airy +datum=OSGB36 +units=m +no_defs',
+    {
+        resolutions: [1600,800,400,200,100,50,25,10,5,2.5,1,0.5,0.25,0.125,0.0625]
+    }
+);
+
+var projection = L.tileLayer.wms('http://t0.ads.astuntechnology.com/open/osopen/service', {
+            layers: 'osopen',
+            format: 'image/png',
+            maxZoom: 14,
+            minZoom: 0,
+            continuousWorld: true,
+            attribution: 'Astun Data Service &copy; Ordnance Survey.'
+        });
+
+
+// Define a standard Leaflet map specifying our crs instance and define a WMS
+// base map
+var map = new L.Map('map', {
+    crs: crs,
+    continuousWorld: true,
+    worldCopyJump: false,
+    layers: [projection]
 });
 
-var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { //Create a tile layer using OpenStreetMap data
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', //Give the copyright in the lower right of the map
-}).addTo(map); //Place it on the map
 
-var aerial = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+// Centre on Plymouth zoom to the maximum extent
+map.setView([50.3755, -4.1387], 8);
+var stripes = new L.StripePattern(); stripes.addTo(map);
+//Initialize the StyleEditor
+var styleEditor = L.control.styleEditor({
+    position: "topleft",
+    colorRamp: ["#1abc9c","#2ecc71","#3498db","#9b59b6","#34495e","#16a085","#27ae60","#2980b9","#8e44ad","#2c3e50","#f1c40f","#e67e22","#e74c3c","#ecf0f1","#95a5a6","#f39c12","#d35400","#c0392b","#bdc3c7","#7f8c8d"],
+    markers: ['circle-stroked', 'circle', 'square-stroked', 'square']
 });
+map.addControl(styleEditor);
 
 var baseMap = {
-  "OpenStreetMap" : osm,
-  "Aerial": aerial
+  "Projection" : projection,
 }
 
 // create a red polygon from an array of LatLng points
@@ -36,7 +63,7 @@ var latlngs = [[50.376429, -4.139996],[50.375889, -4.141241],[50.374989, -4.1416
 var latlngs2 = [[50.376229, -4.134996],[50.374989, -4.135761],[50.374759, -4.134861],[50.374950, -4.134450],[50.37590, -4.133950]];
 
 var lcontrol = L.control.layers(baseMap, pgons).addTo(map);
-var stripes = new L.StripePattern(); stripes.addTo(map);
+
 
 function switchRender() {
     if(document.getElementById("polyName").value == "") {
@@ -51,6 +78,7 @@ function switchRender() {
             
             var pName = document.getElementById("polyName").value;
             lcontrol.addOverlay(polygon1, pName);
+            polygon1.addTo(map);
             i++;
             console.log(map._layers);
             break;
@@ -95,9 +123,7 @@ function switchRender() {
                 break;
             }
             break;
-    }
-        // zoom the map to the polygon
-        map.fitBounds(polygon1.getBounds());
+        }
     }
     
 }
