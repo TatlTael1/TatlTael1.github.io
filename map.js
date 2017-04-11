@@ -30,7 +30,7 @@ var crs = new L.Proj.CRS(
     }
 );
 
-var projection = L.tileLayer.wms('http://t0.ads.astuntechnology.com/open/osopen/service', {
+var projection = L.tileLayer.wms('https://t0.ads.astuntechnology.com/open/osopen/service', {
             layers: 'osopen',
             format: 'image/png',
             maxZoom: 14,
