@@ -1,5 +1,13 @@
 var i = 1;
 var pgons = {};
+var geojsonMarkerOptions = {
+    radius: 8,
+    fillColor: "#ff7800",
+    color: "#000",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
 
 function showPatternTypes() {
   if(document.getElementById('patternType').style.visibility == 'hidden'){
@@ -43,7 +51,7 @@ var map = new L.Map('map', {
 
 
 // Centre on Plymouth zoom to the maximum extent
-map.setView([50.3755, -4.1387], 8);
+map.setView([50.3755, -4.1387], 10);
 var stripes = new L.StripePattern(); stripes.addTo(map);
 //Initialize the StyleEditor
 var styleEditor = L.control.styleEditor({
@@ -62,8 +70,13 @@ var latlngs = [[50.376429, -4.139996],[50.375889, -4.141241],[50.374989, -4.1416
 
 var latlngs2 = [[50.376229, -4.134996],[50.374989, -4.135761],[50.374759, -4.134861],[50.374950, -4.134450],[50.37590, -4.133950]];
 
+var lineLatlngs = [[50.376429, -4.139996], [50.378029, -4.139996]];
+
 var lcontrol = L.control.layers(baseMap, pgons).addTo(map);
 
+var polyline = L.polyline(lineLatlngs, {color: 'red'}).addTo(map);
+
+omnivore.csv('csv/CMPT.csv').addTo(map);
 
 function switchRender() {
     if(document.getElementById("polyName").value == "") {
@@ -126,4 +139,53 @@ function switchRender() {
         }
     }
     
+}
+
+
+document.getElementById("fileUpload").onclick = function(e){ //When you click the submit button...
+	var files = document.getElementById('file').files; //...It takes the file you give it
+	if (files.length == 0) { //But if you don't provide a file...
+	  return; //...Do nothing
+  }
+  
+  var file = files[0]; //Take the file provided and select the first in the array it gives
+  
+  if (file.name.slice(-3) != 'zip'){ //Test for .zip. All others, return.
+		document.getElementById('warning').innerHTML = 'Select .zip file';  //If a .zip isn't given, push a message to the user	
+    return;
+  } else {
+  	document.getElementById('warning').innerHTML = ''; //Clear the warning message if any was given
+    handleZipFile(file); //Call the handleZipFile function and pass it the file we submitted
+  }
+};
+
+//More info: https://developer.mozilla.org/en-US/docs/Web/API/FileReader <-- HTML5 FileReader 
+function handleZipFile(file){
+	var reader = new FileReader(); //Create a new instance of the FileReader
+  reader.onload = function(){ //When the reader loads up...
+	  if (reader.readyState != 2 || reader.error){ //...Check if it is ready, if not, throw an error
+		  return;
+	  } else { //...But if it is ready, call the convert to layer function and pass the result to it
+		  convertToLayer(reader.result);
+  	}
+  }
+  reader.readAsArrayBuffer(file); //Buffer the .zip file into an array
+}
+
+function convertToLayer(buffer){ //Take the buffered file and convert it into a GeoJSON format, then add it to the map (Uses shapefile-js and leaflet.shapefile by calvinmetcalf)
+	shp(buffer).then(function(geojson){	//More info: https://github.com/calvinmetcalf/shapefile-js
+    var layer = L.shapefile(geojson, { //Pass the shapefile to the new layer as a geoJSON file, and use the onEachFeature setting to bind the properties from the .dbf file to each marker, then place them on the map
+        pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, geojsonMarkerOptions);
+    },
+      onEachFeature: function(feature, layer) {
+        if (feature.properties) {
+          layer.bindPopup(Object.keys(feature.properties).map(function(k) {
+            return k + ": " + feature.properties[k] ;
+          }).join("<br />"),{maxHeight:200});
+        }
+      }}).addTo(map);//More info: https://github.com/calvinmetcalf/leaflet.shapefile
+    console.log(layer); //Log the layer details in the console to check it works correctly
+  });
+  
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!-- LeafletJS stylesheet and Javascript included from CDN -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link rel="stylesheet" href="css/style.css" />
@@ -8,6 +9,9 @@
 <body>
     <!-- div for the map to be drawn onto -->
     <div id="map"></div>
+    <input type="file" id="file" /> <br />
+    <input type="submit" id="fileUpload" value="Submit Map"> <span id="warning"></span> <br />
+  
     <input type="text" id="polyName" placeholder="Enter a name for the Polygon">
     <input type="radio" name="renderOption" value="red"> Red (Uni)
     <input type="radio" name="renderOption" value="green"> Green (School)
@@ -25,6 +29,9 @@
     <script src="projection/proj4leaflet.js"></script>
     <script src="styleEditor/Leaflet.StyleEditor.js"></script>
     <script src="styleEditor/Leaflet.StyleForms.js"></script>
+    <script src="csv/leaflet-omnivore.min.js"></script>
+    <script src="leaflet.shpfile.js"></script>
+    <script src="shp.js"></script>
     <script src="map.js"></script>
 </body>
 </hmtl>
