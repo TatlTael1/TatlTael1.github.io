@@ -1,17 +1,26 @@
 <!DOCTYPE html>
+<html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <!-- LeafletJS stylesheet and Javascript included from CDN -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/Leaflet.StyleEditor.css" />
+    <!-- LeafletJS stylesheet and various other styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" /> <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="css/style.css" /> <!-- My CSS file to handle map area -->
+    <link rel="stylesheet" href="css/Leaflet.StyleEditor.css" /> <!-- CSS that works with the style editor, not needed -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> <!-- Forgot what used this, too scared to remove it -->
+    <link rel="stylesheet" href="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.css" /> <!-- CSS for location service -->
 </head>
 <body>
     <!-- div for the map to be drawn onto -->
     <div id="map"></div>
-    <input type="file" id="file" /> <br />
+    <!-- Various inputs I used for testing, not really needed for anything -->
+    <!--<input type="file" id="file" /> <br /> 
     <input type="submit" id="fileUpload" value="Submit Map"> <span id="warning"></span> <br />
-  
+    <input type="submit" id="csvUpload" value="Load CSV" onclick="loadCSV()">-->
+    <input type="file" id="csv-file" name="files"/> <br /> <!-- File input for CSV files -->
+    <input type="text" id="styleNumber" name="styleNumber" placeholder="Style ID"> <!-- Text input for selecting Style ID, will be replaced with a different method of selecting the ID -->
+    <input type="submit" id="createPolygon" name="createPolygon" value="Create Polygon" onclick="createPolygon()"> <!-- Button to create a polygon for testing purposes -->
+    
+  <!-- This was all used for creating polygons and using style editor on them, which wasn't my job (but I thought it was)
     <input type="text" id="polyName" placeholder="Enter a name for the Polygon">
     <input type="radio" name="renderOption" value="red"> Red (Uni)
     <input type="radio" name="renderOption" value="green"> Green (School)
@@ -20,18 +29,21 @@
     <div id="patternType" style="visibility: hidden">
       <input type="radio" name="patternOption" value="stripe"> Stripe
       <input type="radio" name="patternOption" value="circle">Circle
-    </div>
+    </div> -->
 
-    <!-- Include the code for creating the map -->
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-    <script src="pattern/leaflet.pattern-src.js"></script>
-    <script src="projection/proj4.js"></script>
-    <script src="projection/proj4leaflet.js"></script>
-    <script src="styleEditor/Leaflet.StyleEditor.js"></script>
-    <script src="styleEditor/Leaflet.StyleForms.js"></script>
-    <script src="csv/leaflet-omnivore.min.js"></script>
-    <script src="leaflet.shpfile.js"></script>
-    <script src="shp.js"></script>
-    <script src="map.js"></script>
+    <!-- Include the code for creating the map, some of these may have been covered by others and therefore not needed -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> <!-- JQuery for small amount of file handling -->
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script> <!-- LeafletJS -->
+    <script src="pattern/leaflet.pattern-src.js"></script> <!-- Leaflet-Pattern to put patterns in the fill of polygons -->
+    <script src="projection/proj4.js"></script> <!-- Proj4JS to help with projections -->
+    <script src="projection/proj4leaflet.js"></script> <!-- Proj4Leaflet to make Proj4JS work with LeafletJS -->
+    <script src="styleEditor/Leaflet.StyleEditor.js"></script> <!-- Style editor to make it easier to change colours, not needed -->
+    <script src="styleEditor/Leaflet.StyleForms.js"></script> <!-- Works with Style editor, not needed -->
+    <script src="leaflet.shpfile.js"></script> <!-- Makes SHP files work in LeafletJS -->
+    <script src="csv/leaflet.geocsv.js"></script> <!-- Used CSV to place markers, not needed -->
+    <script src="shp.js"></script> <!-- Handles shp files along with other shp file plugin -->
+    <script src="https://domoritz.github.io/leaflet-locatecontrol/dist/L.Control.Locate.min.js" charset="utf-8"></script> <!-- Added location service, was used for projection testing -->
+    <script src="csv/PapaParse-4.3.2/papaparse.min.js"></script> <!-- Used to parse the CSV files -->
+    <script src="map.js"></script> <!-- My file that has all the code to handle to deal with the map and CSV handling -->
 </body>
-</hmtl>
+</html>
